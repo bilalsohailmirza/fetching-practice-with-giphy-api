@@ -1,23 +1,37 @@
 body {
     background-color: black;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+  }
+  .container{
+    align-items: center;
+  }
+  .form-inline {
+    /*flex direction is 'row' by default */
+    display:flex;
+    /* width: 60%; */
+  }
+  .form-inline input {
+    max-width: 60%;
   }
   
   .gifs {
     margin: 0 auto;
-    width: 80%;
+    width: 90%;
     display: flex;
     -ms-flex-align: center;
     flex-wrap:wrap;
+    align-items: center;
     justify-content:space-between;
   }
   
   .gif {
-    /* border-radius: 10px; */
+    border-radius: 10px;
     padding: 0 2px;
-    /* margin: 0.5rem 0.5rem 0.5rem 0.5rem; */
-    /* width: 25%; */
   }
   
   .loader {
+    /* margin-top: 2rem; */
     color: blue;
   }
