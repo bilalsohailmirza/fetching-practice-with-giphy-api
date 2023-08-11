@@ -78,18 +78,22 @@ const Giphy = () => {
 
         event.preventDefault()
         setIsError(false)
-        setIsLoading(false)
+        setIsLoading(true)
 
-        const api_key="FRBw0oIVsmPSFBa82wdhJesZMl2ZDtO2";
-
+        const API_KEY="FRBw0oIVsmPSFBa82wdhJesZMl2ZDtO2";
+        const LIMIT = 10
         try {
-            const response = await fetch(`https://api.giphy.com/v1/gifs/trending?api_key=${api_key}`,{method:'get'})
-            const responseJson = await response.json()
-            console.log(responseJson)
-            setData(responseJson.data)
-        }catch(err) {
+            const response = await fetch(`https://api.giphy.com/v1/gifs/search?api_key=${API_KEY}&q=${search}&limit=${LIMIT}`,{method:'get'})
 
+            const responseJson = await response.json()
+            // console.log(responseJson.data)
+            setData(responseJson.data)
+
+        }catch(err) {
+            setIsError(true)
+            setTimeout(() => setIsError(false), 5000)
         }
+        setIsLoading(false)
     }
 
     return (
