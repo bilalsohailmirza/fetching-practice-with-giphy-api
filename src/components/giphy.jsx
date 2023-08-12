@@ -107,6 +107,7 @@ const Giphy = () => {
 
         setCurrentPage(pageNumber)
     }
+    
     return (
         <div className="container justify-content-center">
             <div className="mt-3">{renderError()}</div>
