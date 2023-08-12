@@ -1,7 +1,11 @@
 import React from "react";
 import { useEffect, useState } from "react";
+
 import '../App.css'
+
 import Loader from "./Loader";
+import Paginate from "./Pagination";
+
 
 const Giphy = () => {
 
@@ -11,11 +15,19 @@ const Giphy = () => {
     const [isError, setIsError] = useState(false)
     const [search, setSearch] = useState("")
 
+
+    // Pagination States and Variables
+    const [currentPage, setCurrentPage] = useState(1)
+    const [itemsPerPage, setItemsPerPage] = useState(10)
+    const lastItemIndex = currentPage*itemsPerPage
+    const firstItemIndex = lastItemIndex - itemsPerPage
+    const curentItems = data.slice(firstItemIndex, lastItemIndex)
+
     // Hook to fetch GIPHY API
     useEffect(() => {
         const fetchData = async () => {
             const API_KEY="FRBw0oIVsmPSFBa82wdhJesZMl2ZDtO2";
-            const LIMIT = 10;
+            const LIMIT = 50;
 
             setIsError(false)
             setIsLoading(true)
@@ -25,19 +37,14 @@ const Giphy = () => {
                         method:'get'}
                 )
                 const responseJson = await response.json()
-                    // .then(response => response.json())
-                    // .then(content => {
-                        // console.log(result)
-                        // setData(result.data)
-                        console.log(responseJson)
                         setData(responseJson.data)
-                    // })      
-            }catch(err) {
+
+            } catch(err) {
                 setIsError(true)
                 setTimeout(() => setIsError(false), 5000)
             }
             setIsLoading(false)
-            }
+        }
 
             return () => fetchData();
         },[])
@@ -48,7 +55,7 @@ const Giphy = () => {
             return  <div className="loader"><Loader /></div>
         }
 
-        return data.map(item => {
+        return curentItems.map(item => {
             return (
                 <div key={item.id} className="gif">
                     <img src={item.images.fixed_height.url} alt="" />
@@ -81,7 +88,7 @@ const Giphy = () => {
         setIsLoading(true)
 
         const API_KEY="FRBw0oIVsmPSFBa82wdhJesZMl2ZDtO2";
-        const LIMIT = 10
+        const LIMIT = 50
         try {
             const response = await fetch(`https://api.giphy.com/v1/gifs/search?api_key=${API_KEY}&q=${search}&limit=${LIMIT}`,{method:'get'})
 
@@ -96,6 +103,10 @@ const Giphy = () => {
         setIsLoading(false)
     }
 
+    const pageSelected = (pageNumber) => {
+
+        setCurrentPage(pageNumber)
+    }
     return (
         <div className="container justify-content-center">
             <div className="mt-3">{renderError()}</div>
@@ -105,15 +116,22 @@ const Giphy = () => {
             <button
             onClick={handleSubmit}
             type="submit"
-            className="btn btn-primary mx-2"
-            >
+            className="btn btn-primary mx-2">
             Go
             </button>
         </form>
 
+
         <div className="gifs">
             {renderGifs()}
         </div>
+        <Paginate 
+            currentPage={currentPage}
+            itemsPerPage={itemsPerPage}
+            totalItems={data.length}
+            pageSelected={pageSelected} 
+        />
+
         </div>
     )
 };
